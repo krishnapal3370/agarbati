@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Solar Dryer</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f7f5;
+  color: #17352a;
+}
+
+.header {
+  background: linear-gradient(135deg,#087f5b,#20a36a);
+  color: white;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 28px 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #68746f;
+  margin-bottom: 15px;
+}
+
+.value {
+  font-size: 42px;
+  font-weight: bold;
+  color: #087f5b;
+}
+
+.unit {
+  font-size: 18px;
+  color: #52605a;
+}
+
+.batteryOuter {
+  width: 80%;
+  height: 22px;
+  margin: 15px auto 5px auto;
+  background: #e4e8e6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.batteryFill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#ff922b,#20a36a);
+  transition: width 1s;
+}
+
+.small {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #52605a;
+}
+
+.status {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #087f5b;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 12px;
+  color: #7c8983;
+}
+
+@media(max-width:650px) {
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>SMART SOLAR DRYER</h1>
+  <p>Environmental & Battery Monitoring</p>
+</div>
+
+<div class="container">
+  <div class="cards">
+
+    <div class="card">
+      <div class="title">UPPER TEMPERATURE</div>
+      <span class="value" id="upperTemp">48.6</span>
+      <span class="unit">&deg;C</span>
+    </div>
+
+    <div class="card">
+      <div class="title">LOWER TEMPERATURE</div>
+      <span class="value" id="lowerTemp">45.3</span>
+      <span class="unit">&deg;C</span>
+    </div>
+
+    <div class="card">
+      <div class="title">UPPER HUMIDITY</div>
+      <span class="value" id="upperHumidity">31</span>
+      <span class="unit">%</span>
+    </div>
+
+    <div class="card">
+      <div class="title">LOWER HUMIDITY</div>
+      <span class="value" id="lowerHumidity">36</span>
+      <span class="unit">%</span>
+    </div>
+
+    <div class="card">
+      <div class="title">BATTERY STATUS</div>
+
+      <span class="value" id="battery">82</span>
+      <span class="unit">%</span>
+
+      <div class="batteryOuter">
+        <div class="batteryFill" id="batteryFill" style="width:82%"></div>
+      </div>
+
+      <div class="small">
+        <b><span id="voltage">12.5</span> V</b>
+      </div>
+
+      <div class="small">
+        Estimated remaining energy:
+        <b><span id="energy">255.8</span> Wh</b>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">SYSTEM LOAD</div>
+
+      <span class="value" id="power">42.0</span>
+      <span class="unit">W</span>
+
+      <div class="small">
+        Current: <span id="current">3.36</span> A
+      </div>
+
+      <div class="small">
+        Heater: <span id="heater">ON</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="status">
+    Smart Solar Dryer Dashboard Online
+  </div>
+
+  <div class="footer">
+    Smart Solar-Powered Dryer Monitoring System
+  </div>
+</div>
+
+<script>
+// GitHub Pages is static hosting. This self-contained page runs directly
+// without requiring a separate JavaScript file.
+//
+// When you later connect an HTTPS cloud API, replace this demo update
+// function with fetch() calls to your API endpoint.
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+function updateDashboard() {
+  const t = Date.now() / 1000;
+
+  const upperTemp = 48.6 + Math.sin(t / 6) * 1.3;
+  const lowerTemp = 45.3 + Math.sin(t / 7 + 0.8) * 1.0;
+  const upperHumidity = 31 + Math.sin(t / 8) * 2.0;
+  const lowerHumidity = 36 + Math.sin(t / 9 + 0.4) * 2.2;
+  const battery = clamp(82 + Math.sin(t / 40) * 1.0, 0, 100);
+  const voltage = 11.8 + (battery / 100) * 1.0;
+  const energy = battery / 100 * 312;
+  const power = 42 + Math.sin(t / 5) * 3.0;
+  const current = power / voltage;
+  const heater = upperTemp < 50 ? "ON" : "STANDBY";
+
+  document.getElementById("upperTemp").textContent = upperTemp.toFixed(1);
+  document.getElementById("lowerTemp").textContent = lowerTemp.toFixed(1);
+  document.getElementById("upperHumidity").textContent = upperHumidity.toFixed(0);
+  document.getElementById("lowerHumidity").textContent = lowerHumidity.toFixed(0);
+  document.getElementById("battery").textContent = battery.toFixed(0);
+  document.getElementById("voltage").textContent = voltage.toFixed(2);
+  document.getElementById("energy").textContent = energy.toFixed(1);
+  document.getElementById("power").textContent = power.toFixed(1);
+  document.getElementById("current").textContent = current.toFixed(2);
+  document.getElementById("heater").textContent = heater;
+  document.getElementById("batteryFill").style.width = battery.toFixed(0) + "%";
+}
+
+setInterval(updateDashboard, 1500);
+updateDashboard();
+</script>
+
+</body>
+</html>
