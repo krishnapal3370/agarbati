@@ -1,447 +1,962 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SunConfluence Smart Solar Dryer</title>
+    <title>SunConfluence Smart Solar Dryer</title>
 
-<style>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-* {
-  box-sizing: border-box;
-}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7f5;
+            color: #1d2a22;
+        }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f1f7f4;
-  color: #17352a;
-}
+        /* =====================================================
+           ESP32 CONNECTION SCREEN
+        ====================================================== */
 
-/* ================= HEADER ================= */
+        #connectionScreen {
+            position: fixed;
+            inset: 0;
 
-.header {
-  background: linear-gradient(135deg, #087f5b, #20a36a);
-  color: white;
-  text-align: center;
-  padding: 28px 15px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
 
-.header h1 {
-  margin: 0;
-  font-size: 30px;
-  letter-spacing: 1px;
-}
+            text-align: center;
 
-.header p {
-  margin: 8px 0 0;
-  font-size: 14px;
-}
+            background:
+                linear-gradient(
+                    135deg,
+                    #effff3,
+                    #ffffff,
+                    #fff9ed
+                );
 
-/* ================= CONTAINER ================= */
+            z-index: 99999;
 
-.container {
-  max-width: 950px;
-  margin: auto;
-  padding: 30px 20px;
-}
+            padding: 25px;
+        }
 
-/* ================= CARDS ================= */
+        .connection-card {
+            width: min(520px, 95%);
+            background: white;
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
+            padding: 38px 30px;
 
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 32px 18px;
-  text-align: center;
-  box-shadow: 0 5px 18px rgba(0,0,0,0.10);
-}
+            border-radius: 20px;
 
-.icon {
-  font-size: 35px;
-  margin-bottom: 10px;
-}
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.12);
+        }
 
-.title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #66756f;
-  letter-spacing: 0.6px;
-  margin-bottom: 15px;
-}
+        .logo-title {
+            font-size: 38px;
+            font-weight: 800;
+            color: #12803b;
+            margin-bottom: 6px;
+        }
 
-.value {
-  font-size: 46px;
-  font-weight: bold;
-  color: #087f5b;
-}
+        .subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 28px;
+        }
 
-.unit {
-  font-size: 20px;
-  color: #52605a;
-}
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
 
-/* ================= BATTERY ================= */
+            gap: 9px;
 
-.batteryOuter {
-  width: 85%;
-  height: 22px;
-  margin: 20px auto 5px;
-  background: #e3e8e6;
-  border-radius: 14px;
-  overflow: hidden;
-}
+            background: #f5f5f5;
 
-.batteryFill {
-  height: 100%;
-  width: 89%;
-  background: #20a36a;
-  transition: width 1s ease;
-}
+            padding: 12px 18px;
 
-.batteryText {
-  margin-top: 12px;
-  font-size: 13px;
-  color: #66756f;
-}
+            border-radius: 12px;
 
-/* ================= PREPARATION ================= */
+            margin-bottom: 22px;
 
-.preparationArea {
-  margin-top: 18px;
-}
+            font-weight: 600;
+        }
 
-.simpleLine {
-  width: 75%;
-  height: 2px;
-  background: #087f5b;
-  margin: 14px auto;
-}
+        #statusDot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d62828;
+        }
 
-.preparationText {
-  font-size: 15px;
-  font-weight: bold;
-  color: #52605a;
-}
+        #connectButton {
+            display: block;
 
-.prepareCounter {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #7b8983;
-}
+            width: 100%;
 
-/* ================= TIMER ================= */
+            padding: 15px 20px;
 
-.timerArea {
-  display: none;
-}
+            border: none;
+            border-radius: 10px;
 
-.timerValue {
-  font-size: 48px;
-  font-weight: bold;
-  color: #087f5b;
-  letter-spacing: 2px;
-}
+            background: #138a3e;
+            color: white;
 
-.timerStatus {
-  margin-top: 15px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #68746f;
-}
+            font-size: 18px;
+            font-weight: 700;
 
-.timerComplete {
-  color: #e67e22;
-  font-size: 16px;
-  font-weight: bold;
-}
+            cursor: pointer;
 
-/* ================= STATUS ================= */
+            transition: 0.25s;
+        }
 
-.status {
-  margin-top: 28px;
-  padding: 15px;
-  background: white;
-  border-radius: 14px;
-  text-align: center;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-  color: #087f5b;
-  font-weight: bold;
-  font-size: 14px;
-}
+        #connectButton:hover {
+            transform: translateY(-1px);
+            background: #0d7331;
+        }
 
-.onlineDot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: #20a36a;
-  border-radius: 50%;
-  margin-right: 7px;
-}
+        #connectButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
-/* ================= FOOTER ================= */
+        .connection-info {
+            margin-top: 18px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
 
-.footer {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 12px;
-  color: #7b8983;
-}
+        /* =====================================================
+           DASHBOARD
+        ====================================================== */
 
-/* ================= MOBILE ================= */
+        #dashboard {
+            display: none;
+            min-height: 100vh;
+        }
 
-@media(max-width: 700px) {
+        .header {
+            background:
+                linear-gradient(
+                    90deg,
+                    #0b7434,
+                    #159447
+                );
 
-  .cards {
-    grid-template-columns: 1fr;
-  }
+            color: white;
 
-  .header h1 {
-    font-size: 24px;
-  }
+            padding: 18px 30px;
 
-  .timerValue {
-    font-size: 42px;
-  }
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-}
+            flex-wrap: wrap;
 
-</style>
+            gap: 10px;
+        }
+
+        .header h1 {
+            font-size: 27px;
+        }
+
+        .header p {
+            margin-top: 4px;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .live-status {
+            background: rgba(255,255,255,0.16);
+
+            padding: 9px 14px;
+
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .green-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #66ff8c;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* =====================================================
+           PREPARATION AREA
+        ====================================================== */
+
+        #preparation {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.08);
+
+            text-align: center;
+        }
+
+        #preparation h2 {
+            color: #16843d;
+            margin-bottom: 15px;
+            font-size: 21px;
+        }
+
+        .prep-line {
+            height: 6px;
+            background: #189447;
+            border-radius: 10px;
+            margin: 9px 0;
+        }
+
+        /* =====================================================
+           MODE BOX
+        ====================================================== */
+
+        .mode-box {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 17px 20px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+        .mode-title {
+            font-size: 14px;
+            color: #777;
+        }
+
+        #mode {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e87511;
+        }
+
+        /* =====================================================
+           DATA CARDS
+        ====================================================== */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(0,0,0,0.08);
+
+            position: relative;
+
+            min-height: 175px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            color: #6d756f;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .reading {
+            font-size: 43px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .temperature {
+            color: #e06028;
+        }
+
+        .humidity {
+            color: #2877c8;
+        }
+
+        .battery {
+            color: #16833c;
+        }
+
+        .timer {
+            color: #7452bc;
+        }
+
+        .small-info {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           SENSOR DETAIL
+        ====================================================== */
+
+        .sensor-section {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 21px;
+
+            margin-top: 22px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(0,0,0,0.08);
+        }
+
+        .sensor-section h3 {
+            margin-bottom: 15px;
+            color: #15813b;
+        }
+
+        .sensor-row {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        .sensor-item {
+            background: #f6f8f7;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .sensor-label {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 7px;
+        }
+
+        .sensor-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           SYSTEM STATUS
+        ====================================================== */
+
+        .system-status {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 22px;
+
+            margin-top: 22px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(0,0,0,0.08);
+        }
+
+        .system-status h3 {
+            color: #16833c;
+            margin-bottom: 15px;
+        }
+
+        .status-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .status-item {
+            background: #f6f8f7;
+
+            border-radius: 9px;
+
+            padding: 13px;
+
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 7px;
+        }
+
+        .state-on {
+            color: #12843a;
+            font-weight: bold;
+        }
+
+        .state-off {
+            color: #777;
+            font-weight: bold;
+        }
+
+        /* =====================================================
+           DISCONNECT BUTTON
+        ====================================================== */
+
+        #disconnectButton {
+            margin-top: 22px;
+
+            width: 100%;
+
+            border: none;
+
+            background: #d83a35;
+
+            color: white;
+
+            padding: 13px;
+
+            border-radius: 9px;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        footer {
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding: 18px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media(max-width:700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sensor-row {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reading {
+                font-size: 36px;
+            }
+
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
 
 
-<!-- ================= HEADER ================= -->
+<!-- =========================================================
+     ESP32 CONNECTION SCREEN
+========================================================= -->
 
-<div class="header">
+<div id="connectionScreen">
 
-  <h1>
-    SUNCONFLUENCE SMART SOLAR DRYER
-  </h1>
+    <div class="connection-card">
 
-  <p>
-    Temperature • Humidity • Battery • Agarbatti Drying Monitor
-  </p>
+        <div class="logo-title">
+            SunConfluence
+        </div>
 
-</div>
+        <div class="subtitle">
+            Smart Solar Multi-Mode Dryer
+        </div>
 
+        <div class="connection-status">
 
-<div class="container">
+            <span id="statusDot"></span>
 
-<div class="cards">
+            <span id="connectionText">
+                ESP32-WROVER-B Not Connected
+            </span>
 
-
-<!-- =================================================
-     TEMPERATURE
-================================================== -->
-
-<div class="card">
-
-  <div class="icon">
-    🌡️
-  </div>
-
-  <div class="title">
-    TEMPERATURE
-  </div>
-
-  <span
-    class="value"
-    id="temperature">
-    29.2
-  </span>
-
-  <span class="unit">
-    °C
-  </span>
-
-</div>
+        </div>
 
 
-<!-- =================================================
-     HUMIDITY
-================================================== -->
+        <button
+            id="connectButton"
+            onclick="connectESP()">
 
-<div class="card">
+            Connect ESP32-WROVER-B
 
-  <div class="icon">
-    💧
-  </div>
-
-  <div class="title">
-    HUMIDITY
-  </div>
-
-  <span
-    class="value"
-    id="humidity">
-    74
-  </span>
-
-  <span class="unit">
-    %
-  </span>
-
-</div>
+        </button>
 
 
-<!-- =================================================
-     BATTERY
-================================================== -->
+        <div class="connection-info">
 
-<div class="card">
+            Connect the SunConfluence controller
+            through USB and press the button above.
 
-  <div class="icon">
-    🔋
-  </div>
+            <br><br>
 
-  <div class="title">
-    BATTERY LEVEL
-  </div>
+            The monitoring dashboard will start
+            only after the controller is verified.
 
-  <span
-    class="value"
-    id="battery">
-    89
-  </span>
-
-  <span class="unit">
-    %
-  </span>
-
-
-  <div class="batteryOuter">
-
-    <div
-      class="batteryFill"
-      id="batteryFill"
-      style="width:89%">
-    </div>
-
-  </div>
-
-
-  <div
-    class="batteryText"
-    id="batteryStatus">
-
-    Battery Status: GOOD
-
-  </div>
-
-</div>
-
-
-<!-- =================================================
-     AGARBATTI DRYING TIMER
-================================================== -->
-
-<div class="card">
-
-  <div class="icon">
-    ⏱️
-  </div>
-
-  <div class="title">
-    AGARBATTI DRYING TIMER
-  </div>
-
-
-  <!-- ===============================
-       FIRST 5 SECONDS
-  ================================ -->
-
-  <div
-    class="preparationArea"
-    id="preparationArea">
-
-    <div class="simpleLine"></div>
-
-    <div class="preparationText">
-      Preparing Agarbatti Drying Cycle
-    </div>
-
-    <div
-      class="prepareCounter"
-      id="prepareCounter">
-
-      Starting in 5 seconds...
+        </div>
 
     </div>
 
-    <div class="simpleLine"></div>
-
-  </div>
+</div>
 
 
-  <!-- ===============================
-       MAIN 3-HOUR TIMER
-  ================================ -->
 
-  <div
-    class="timerArea"
-    id="timerArea">
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
 
-    <div
-      class="timerValue"
-      id="timerDisplay">
+<div id="dashboard">
 
-      03:00:00
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                SunConfluence
+            </h1>
+
+            <p>
+                Smart Solar Agarbatti Dryer
+            </p>
+
+        </div>
+
+        <div class="live-status">
+
+            <div class="green-dot"></div>
+
+            ESP32-WROVER-B Connected
+
+        </div>
 
     </div>
 
 
-    <div
-      class="timerStatus"
-      id="timerStatus">
 
-      Controlled Drying in Progress
+    <div class="container">
+
+
+        <!-- PREPARATION -->
+
+        <div id="preparation">
+
+            <h2>
+                Preparing Agarbatti Drying Cycle
+            </h2>
+
+            <!-- Plain green lines as requested -->
+
+            <div class="prep-line"></div>
+            <div class="prep-line"></div>
+
+            <p style="margin-top:12px;color:#777">
+                Initializing sensors and control system...
+            </p>
+
+        </div>
+
+
+
+        <!-- MODE -->
+
+        <div class="mode-box">
+
+            <div>
+
+                <div class="mode-title">
+                    Selected Drying Mode
+                </div>
+
+                <div id="mode">
+                    Agarbatti
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="mode-title">
+                    Controller
+                </div>
+
+                <strong>
+                    ESP32-WROVER-B
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MAIN CARDS -->
+
+        <div class="grid">
+
+
+            <!-- TEMPERATURE -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Chamber Temperature
+                </div>
+
+                <div class="reading temperature">
+
+                    <span id="temperature">
+                        --
+                    </span> °C
+
+                </div>
+
+                <div class="small-info">
+
+                    Control value based on
+                    chamber sensor readings
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HUMIDITY -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Chamber Humidity
+                </div>
+
+                <div class="reading humidity">
+
+                    <span id="humidity">
+                        --
+                    </span> %
+
+                </div>
+
+                <div class="small-info">
+
+                    Relative humidity inside
+                    drying chamber
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BATTERY -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Battery Level
+                </div>
+
+                <div class="reading battery">
+
+                    <span id="battery">
+                        --
+                    </span> %
+
+                </div>
+
+                <div class="small-info">
+
+                    Solar-battery system status
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TIMER -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Drying Cycle Timer
+                </div>
+
+                <div
+                    class="reading timer"
+                    id="timer">
+
+                    00:44:00
+
+                </div>
+
+                <div class="small-info">
+
+                    Demonstration cycle timer.
+                    Final drying completion can
+                    also use RH/product validation.
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- SENSOR DETAIL -->
+
+        <div class="sensor-section">
+
+            <h3>
+                Dual-Zone Sensor Monitoring
+            </h3>
+
+            <div class="sensor-row">
+
+
+                <div class="sensor-item">
+
+                    <div class="sensor-label">
+                        Upper Sensor
+                    </div>
+
+                    <div class="sensor-value">
+
+                        <span id="temp1">
+                            --
+                        </span> °C
+
+                        &nbsp; | &nbsp;
+
+                        <span id="rh1">
+                            --
+                        </span> %
+
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-item">
+
+                    <div class="sensor-label">
+                        Lower Sensor
+                    </div>
+
+                    <div class="sensor-value">
+
+                        <span id="temp2">
+                            --
+                        </span> °C
+
+                        &nbsp; | &nbsp;
+
+                        <span id="rh2">
+                            --
+                        </span> %
+
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-item">
+
+                    <div class="sensor-label">
+                        Drying Status
+                    </div>
+
+                    <div
+                        class="sensor-value"
+                        id="dryingStatus">
+
+                        Preparing
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DEVICE STATUS -->
+
+        <div class="system-status">
+
+            <h3>
+                Control System Status
+            </h3>
+
+            <div class="status-grid">
+
+
+                <div class="status-item">
+
+                    <div class="status-label">
+                        Heater
+                    </div>
+
+                    <div
+                        id="heaterState"
+                        class="state-off">
+
+                        OFF
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <div class="status-label">
+                        Circulation Fan
+                    </div>
+
+                    <div
+                        id="circulationState"
+                        class="state-off">
+
+                        OFF
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <div class="status-label">
+                        Exhaust Fan
+                    </div>
+
+                    <div
+                        id="exhaustState"
+                        class="state-off">
+
+                        OFF
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <button
+            id="disconnectButton"
+            onclick="disconnectESP()">
+
+            Disconnect ESP32
+
+        </button>
+
+
+        <footer>
+
+            SunConfluence —
+            Smart Solar-Powered Rural Processing Platform
+
+        </footer>
+
 
     </div>
-
-  </div>
-
-</div>
-
-
-</div>
-
-
-<!-- =================================================
-     SYSTEM STATUS
-================================================== -->
-
-<div class="status">
-
-  <span class="onlineDot"></span>
-
-  <span id="systemStatus">
-
-    Smart Solar Dryer Dashboard Online
-
-  </span>
-
-</div>
-
-
-<!-- =================================================
-     FOOTER
-================================================== -->
-
-<div class="footer">
-
-  Team SunConfluence • Smart Solar-Powered Agarbatti Drying System
-
-</div>
-
 
 </div>
 
@@ -449,447 +964,1242 @@ body {
 
 <script>
 
-/* =====================================================
-   GENERAL CLAMP FUNCTION
-===================================================== */
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
-function clamp(value, min, max) {
+let port = null;
 
-  return Math.max(
-    min,
-    Math.min(max, value)
-  );
+let reader = null;
 
-}
+let writer = null;
 
+let keepReading = false;
 
-/* =====================================================
-   BATTERY SETTINGS
-===================================================== */
+let verifiedESP = false;
 
-const startingBattery = 89;
+let receiveBuffer = "";
+
+let timerSeconds = 44 * 60;
+
+let timerInterval = null;
+
+let preparationTimer = null;
 
 
 /*
-Battery drops only 1%
-after every 15 minutes.
+   Identification string expected
+   from our ESP32 firmware.
 */
 
-const batteryDropInterval =
-  15 * 60 * 1000;
+const REQUIRED_DEVICE_ID =
+    "SUNCONFLUENCE_WROVER_B";
 
 
-const dashboardStartTime =
-  Date.now();
+/* =========================================================
+   CONNECT ESP32
+========================================================= */
 
+async function connectESP() {
 
 
-/* =====================================================
-   TEMPERATURE + HUMIDITY + BATTERY
-===================================================== */
+    /*
+       Web Serial currently works best on
+       Chromium browsers such as Chrome/Edge.
+    */
 
-function updateDashboard() {
+    if (!("serial" in navigator)) {
 
+        alert(
+            "Web Serial is not supported by this browser.\n\n" +
+            "Please open this dashboard using Google Chrome or Microsoft Edge on a supported device."
+        );
 
-  const t =
-    Date.now() / 1000;
+        return;
+    }
 
 
-  /* =================================================
-     TEMPERATURE
-
-     approximately 28°C to 30°C
-  ================================================= */
-
-  let temperature =
-    29 +
-    Math.sin(t / 9) * 0.8;
-
-
-  temperature =
-    clamp(
-      temperature,
-      28,
-      30
-    );
-
-
-  /* =================================================
-     HUMIDITY
-
-     approximately 73% to 75%
-  ================================================= */
-
-  let humidity =
-    74 +
-    Math.sin(t / 11) * 0.9;
-
-
-  humidity =
-    clamp(
-      humidity,
-      73,
-      75
-    );
-
-
-  /* =================================================
-     BATTERY
-  ================================================= */
-
-  const elapsedTime =
-    Date.now() -
-    dashboardStartTime;
-
-
-  const batteryDrop =
-    Math.floor(
-      elapsedTime /
-      batteryDropInterval
-    );
-
-
-  let battery =
-    startingBattery -
-    batteryDrop;
-
-
-  battery =
-    clamp(
-      battery,
-      0,
-      100
-    );
-
-
-  /* =================================================
-     BATTERY STATUS
-  ================================================= */
-
-  let batteryStatus;
-
-
-  if (battery >= 80) {
-
-    batteryStatus =
-      "Battery Status: GOOD";
-
-  }
-
-  else if (battery >= 50) {
-
-    batteryStatus =
-      "Battery Status: NORMAL";
-
-  }
-
-  else if (battery >= 20) {
-
-    batteryStatus =
-      "Battery Status: LOW";
-
-  }
-
-  else {
-
-    batteryStatus =
-      "Battery Status: CRITICAL";
-
-  }
-
-
-  /* =================================================
-     UPDATE DISPLAY
-  ================================================= */
-
-  document
-    .getElementById("temperature")
-    .textContent =
-      temperature.toFixed(1);
-
-
-  document
-    .getElementById("humidity")
-    .textContent =
-      humidity.toFixed(0);
-
-
-  document
-    .getElementById("battery")
-    .textContent =
-      battery;
-
-
-  document
-    .getElementById("batteryFill")
-    .style.width =
-      battery + "%";
-
-
-  document
-    .getElementById("batteryStatus")
-    .textContent =
-      batteryStatus;
-
-}
-
-
-
-/* =====================================================
-   AGARBATTI DRYING TIMER
-===================================================== */
-
-/*
-3 hours
-=
-10800 seconds
-*/
-
-let timerSeconds =
-  44 * 60;
-
-
-let timerInterval =
-  null;
-
-
-
-/* =====================================================
-   TIMER DISPLAY
-===================================================== */
-
-function updateTimerDisplay() {
-
-
-  const hours =
-    Math.floor(
-      timerSeconds / 3600
-    );
-
-
-  const minutes =
-    Math.floor(
-      (timerSeconds % 3600) / 60
-    );
-
-
-  const seconds =
-    timerSeconds % 60;
-
-
-  const hh =
-    String(hours)
-      .padStart(2, "0");
-
-
-  const mm =
-    String(minutes)
-      .padStart(2, "0");
-
-
-  const ss =
-    String(seconds)
-      .padStart(2, "0");
-
-
-  document
-    .getElementById("timerDisplay")
-    .textContent =
-      hh +
-      ":" +
-      mm +
-      ":" +
-      ss;
-
-}
-
-
-
-/* =====================================================
-   START 3-HOUR DRYING TIMER
-===================================================== */
-
-function startDryingTimer() {
-
-
-  document
-    .getElementById("systemStatus")
-    .textContent =
-      "Agarbatti Drying Cycle in Progress";
-
-
-  document
-    .getElementById("timerStatus")
-    .textContent =
-      "Controlled Drying in Progress";
-
-
-  updateTimerDisplay();
-
-
-  timerInterval =
-    setInterval(function() {
-
-
-      timerSeconds--;
-
-
-      /* =============================================
-         WHEN 3 HOURS COMPLETE
-      ============================================= */
-
-      if (timerSeconds <= 0) {
-
-
-        timerSeconds = 0;
-
-
-        updateTimerDisplay();
-
-
-        clearInterval(
-          timerInterval
+    const button =
+        document.getElementById(
+            "connectButton"
         );
 
 
-        document
-          .getElementById("timerStatus")
-          .textContent =
-            "DRYNESS CHECK REQUIRED";
+    try {
 
 
-        document
-          .getElementById("timerStatus")
-          .classList.add(
-            "timerComplete"
-          );
+        button.disabled = true;
+
+        button.innerText =
+            "Waiting for ESP32...";
 
 
-        document
-          .getElementById("systemStatus")
-          .textContent =
-            "Initial Drying Complete • Verify Product Dryness";
+        document.getElementById(
+            "connectionText"
+        ).innerText =
+            "Select ESP32 Serial Port";
+
+
+        /*
+           Browser asks user to choose
+           the serial device.
+        */
+
+        port =
+            await navigator.serial.requestPort();
+
+
+        /*
+           Open at same baud rate
+           as Serial.begin() in ESP32.
+        */
+
+        await port.open({
+
+            baudRate: 115200
+
+        });
+
+
+        document.getElementById(
+            "connectionText"
+        ).innerText =
+            "Verifying SunConfluence Controller...";
+
+
+        /*
+           ESP32 may reset when serial port opens.
+           Give it a short time to boot.
+        */
+
+        await delay(1800);
+
+
+        /*
+           Start serial reader.
+        */
+
+        keepReading = true;
+
+        startSerialReader();
+
+
+        /*
+           Send identity request.
+        */
+
+        await delay(400);
+
+        await sendCommand(
+            "WHO_ARE_YOU"
+        );
+
+
+        /*
+           Wait maximum 5 seconds
+           for correct handshake.
+        */
+
+        const verified =
+            await waitForVerification(
+                5000
+            );
+
+
+        if (!verified) {
+
+            alert(
+                "Connected serial device was not verified as the SunConfluence ESP32-WROVER-B controller."
+            );
+
+            await disconnectESP();
+
+            return;
+        }
+
+
+        /*
+           Verified board found.
+        */
+
+        showDashboard();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "connectionText"
+        ).innerText =
+            "ESP32-WROVER-B Not Connected";
+
+
+        document.getElementById(
+            "statusDot"
+        ).style.background =
+            "#d62828";
+
+
+        button.disabled = false;
+
+        button.innerText =
+            "Connect ESP32-WROVER-B";
+
+
+        /*
+           User pressing Cancel should not
+           create a confusing error popup.
+        */
+
+        if (error.name !== "NotFoundError") {
+
+            alert(
+                "ESP32 connection failed.\n\n" +
+                error.message
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   WAIT FOR FIRMWARE VERIFICATION
+========================================================= */
+
+async function waitForVerification(
+    timeout
+) {
+
+    const start =
+        Date.now();
+
+
+    while (
+        Date.now() - start
+        <
+        timeout
+    ) {
+
+        if (verifiedESP) {
+
+            return true;
+
+        }
+
+        await delay(100);
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   SERIAL READER
+========================================================= */
+
+async function startSerialReader() {
+
+
+    const decoder =
+        new TextDecoderStream();
+
+
+    /*
+       Pipe raw serial bytes through
+       text decoder.
+    */
+
+    const readableStreamClosed =
+        port.readable.pipeTo(
+            decoder.writable
+        );
+
+
+    reader =
+        decoder.readable.getReader();
+
+
+    try {
+
+
+        while (
+            keepReading
+        ) {
+
+
+            const {
+                value,
+                done
+            } =
+                await reader.read();
+
+
+            if (done) {
+
+                break;
+
+            }
+
+
+            if (value) {
+
+                receiveBuffer +=
+                    value;
+
+
+                /*
+                   ESP sends one message
+                   per line.
+                */
+
+                let lines =
+                    receiveBuffer.split(
+                        "\n"
+                    );
+
+
+                /*
+                   Last element may be an
+                   incomplete message.
+                */
+
+                receiveBuffer =
+                    lines.pop();
+
+
+                for (
+                    let line
+                    of lines
+                ) {
+
+
+                    line =
+                        line.trim();
+
+
+                    if (
+                        line.length > 0
+                    ) {
+
+                        processESPMessage(
+                            line
+                        );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    catch(error) {
+
+
+        console.error(
+            "Serial reader error:",
+            error
+        );
+
+    }
+
+    finally {
+
+
+        try {
+
+            reader.releaseLock();
+
+        }
+        catch(e) {}
+
+
+        if (
+            keepReading
+        ) {
+
+            handleUnexpectedDisconnect();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   PROCESS DATA FROM ESP32
+========================================================= */
+
+function processESPMessage(
+    message
+) {
+
+
+    console.log(
+        "ESP32:",
+        message
+    );
+
+
+    /*
+       -----------------------------------------------------
+       DEVICE HANDSHAKE
+       -----------------------------------------------------
+    */
+
+    if (
+        message ===
+        REQUIRED_DEVICE_ID
+    ) {
+
+
+        verifiedESP =
+            true;
+
+
+        document.getElementById(
+            "connectionText"
+        ).innerText =
+            "ESP32-WROVER-B Verified";
+
+
+        document.getElementById(
+            "statusDot"
+        ).style.background =
+            "#168a3d";
 
 
         return;
 
-      }
+    }
 
 
-      updateTimerDisplay();
+    /*
+       -----------------------------------------------------
+       JSON SENSOR DATA
+       -----------------------------------------------------
+    */
+
+    try {
 
 
-    }, 1000);
+        const data =
+            JSON.parse(
+                message
+            );
+
+
+        updateDashboard(
+            data
+        );
+
+
+    }
+
+    catch(error) {
+
+
+        /*
+           Ignore normal text/debug
+           messages from ESP32.
+        */
+
+    }
 
 }
 
 
+/* =========================================================
+   UPDATE DASHBOARD WITH REAL ESP32 DATA
+========================================================= */
 
-/* =====================================================
-   5 SECOND PREPARATION COUNTDOWN
-===================================================== */
-
-let preparationSeconds = 5;
-
-
-const preparationCounter =
-  document.getElementById(
-    "prepareCounter"
-  );
+function updateDashboard(
+    data
+) {
 
 
-const preparationInterval =
-  setInterval(function() {
+    /*
+       Sensor 1
+    */
+
+    if (
+        data.t1 !== undefined
+    ) {
+
+        document.getElementById(
+            "temp1"
+        ).innerText =
+            Number(
+                data.t1
+            ).toFixed(1);
+
+    }
 
 
-    preparationSeconds--;
+    if (
+        data.h1 !== undefined
+    ) {
+
+        document.getElementById(
+            "rh1"
+        ).innerText =
+            Number(
+                data.h1
+            ).toFixed(1);
+
+    }
 
 
-    if (preparationSeconds > 0) {
+    /*
+       Sensor 2
+    */
+
+    if (
+        data.t2 !== undefined
+    ) {
+
+        document.getElementById(
+            "temp2"
+        ).innerText =
+            Number(
+                data.t2
+            ).toFixed(1);
+
+    }
 
 
-      preparationCounter.textContent =
-        "Starting in " +
-        preparationSeconds +
-        " seconds...";
+    if (
+        data.h2 !== undefined
+    ) {
+
+        document.getElementById(
+            "rh2"
+        ).innerText =
+            Number(
+                data.h2
+            ).toFixed(1);
+
+    }
+
+
+    /*
+       Control temperature
+    */
+
+    if (
+        data.temp !== undefined
+    ) {
+
+        document.getElementById(
+            "temperature"
+        ).innerText =
+            Number(
+                data.temp
+            ).toFixed(1);
+
+    }
+
+
+    /*
+       Control humidity
+    */
+
+    if (
+        data.humidity !== undefined
+    ) {
+
+        document.getElementById(
+            "humidity"
+        ).innerText =
+            Number(
+                data.humidity
+            ).toFixed(1);
+
+    }
+
+
+    /*
+       Battery
+    */
+
+    if (
+        data.battery !== undefined
+    ) {
+
+        document.getElementById(
+            "battery"
+        ).innerText =
+            Math.round(
+                data.battery
+            );
+
+    }
+
+
+    /*
+       Product mode
+    */
+
+    if (
+        data.mode !== undefined
+    ) {
+
+        document.getElementById(
+            "mode"
+        ).innerText =
+            data.mode;
+
+    }
+
+
+    /*
+       Drying status
+    */
+
+    if (
+        data.status !== undefined
+    ) {
+
+        document.getElementById(
+            "dryingStatus"
+        ).innerText =
+            data.status;
+
+    }
+
+
+    /*
+       Heater state
+    */
+
+    if (
+        data.heater !== undefined
+    ) {
+
+        setState(
+            "heaterState",
+            data.heater
+        );
+
+    }
+
+
+    /*
+       Circulation fan
+    */
+
+    if (
+        data.circulation !== undefined
+    ) {
+
+        setState(
+            "circulationState",
+            data.circulation
+        );
+
+    }
+
+
+    /*
+       Exhaust fan
+    */
+
+    if (
+        data.exhaust !== undefined
+    ) {
+
+        setState(
+            "exhaustState",
+            data.exhaust
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DEVICE STATE DISPLAY
+========================================================= */
+
+function setState(
+    elementId,
+    value
+) {
+
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+
+    const isOn =
+        value === 1 ||
+        value === true ||
+        String(value).toUpperCase()
+            === "ON";
+
+
+    if (
+        isOn
+    ) {
+
+
+        element.innerText =
+            "ON";
+
+
+        element.className =
+            "state-on";
+
 
     }
 
     else {
 
 
-      clearInterval(
-        preparationInterval
-      );
+        element.innerText =
+            "OFF";
 
 
-      preparationCounter.textContent =
-        "Starting...";
+        element.className =
+            "state-off";
+
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW DASHBOARD
+========================================================= */
+
+function showDashboard() {
+
+
+    document.getElementById(
+        "connectionScreen"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "dashboard"
+    ).style.display =
+        "block";
+
+
+    /*
+       Start preparation only after
+       correct ESP32 is verified.
+    */
+
+    startPreparation();
+
+}
+
+
+/* =========================================================
+   5 SECOND PREPARATION
+========================================================= */
+
+function startPreparation() {
+
+
+    const preparation =
+        document.getElementById(
+            "preparation"
+        );
+
+
+    preparation.style.display =
+        "block";
+
+
+    document.getElementById(
+        "dryingStatus"
+    ).innerText =
+        "Preparing";
+
+
+    /*
+       Reset demonstration timer.
+    */
+
+    timerSeconds =
+        44 * 60;
+
+
+    updateTimerDisplay();
+
+
+    /*
+       Five-second preparation stage.
+    */
+
+    preparationTimer =
+        setTimeout(
+            () => {
+
+
+                preparation.style.display =
+                    "none";
+
+
+                document.getElementById(
+                    "dryingStatus"
+                ).innerText =
+                    "Drying";
+
+
+                startDryingTimer();
+
+
+            },
+            5000
+        );
+
+}
+
+
+/* =========================================================
+   44 MINUTE DEMONSTRATION TIMER
+========================================================= */
+
+function startDryingTimer() {
+
+
+    if (
+        timerInterval
+    ) {
+
+        clearInterval(
+            timerInterval
+        );
 
     }
 
 
-  }, 1000);
+    timerInterval =
+        setInterval(
+            () => {
 
 
-
-/* =====================================================
-   WAIT 5 SECONDS BEFORE STARTING TIMER
-===================================================== */
-
-setTimeout(function() {
+                if (
+                    timerSeconds <= 0
+                ) {
 
 
-  /* Hide preparation lines */
-
-  document
-    .getElementById(
-      "preparationArea"
-    )
-    .style.display =
-      "none";
+                    clearInterval(
+                        timerInterval
+                    );
 
 
-  /* Show timer */
-
-  document
-    .getElementById(
-      "timerArea"
-    )
-    .style.display =
-      "block";
+                    timerInterval =
+                        null;
 
 
-  /* Start 3-hour timer */
-
-  startDryingTimer();
-
-
-}, 5000);
+                    document.getElementById(
+                        "dryingStatus"
+                    ).innerText =
+                        "Timer Complete";
 
 
+                    return;
 
-/* =====================================================
-   INITIALIZE DASHBOARD
-===================================================== */
-
-updateDashboard();
-
-updateTimerDisplay();
+                }
 
 
-/*
-Update temperature,
-humidity and battery
-every 2 seconds.
-*/
+                timerSeconds--;
 
-setInterval(
-  updateDashboard,
-  2000
-);
+
+                updateTimerDisplay();
+
+
+            },
+            1000
+        );
+
+}
+
+
+/* =========================================================
+   TIMER FORMAT
+========================================================= */
+
+function updateTimerDisplay() {
+
+
+    const hours =
+        Math.floor(
+            timerSeconds
+            /
+            3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (
+                timerSeconds
+                %
+                3600
+            )
+            /
+            60
+        );
+
+
+    const seconds =
+        timerSeconds
+        %
+        60;
+
+
+    document.getElementById(
+        "timer"
+    ).innerText =
+
+        String(
+            hours
+        ).padStart(
+            2,
+            "0"
+        )
+
+        + ":"
+
+        +
+
+        String(
+            minutes
+        ).padStart(
+            2,
+            "0"
+        )
+
+        + ":"
+
+        +
+
+        String(
+            seconds
+        ).padStart(
+            2,
+            "0"
+        );
+
+}
+
+
+/* =========================================================
+   SEND COMMAND TO ESP32
+========================================================= */
+
+async function sendCommand(
+    command
+) {
+
+
+    if (
+        !port ||
+        !port.writable
+    ) {
+
+        return;
+
+    }
+
+
+    const encoder =
+        new TextEncoder();
+
+
+    writer =
+        port.writable.getWriter();
+
+
+    try {
+
+
+        await writer.write(
+
+            encoder.encode(
+                command
+                +
+                "\n"
+            )
+
+        );
+
+
+    }
+
+    finally {
+
+
+        writer.releaseLock();
+
+
+        writer =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   DISCONNECT ESP32
+========================================================= */
+
+async function disconnectESP() {
+
+
+    keepReading =
+        false;
+
+
+    verifiedESP =
+        false;
+
+
+    /*
+       Stop preparation timer.
+    */
+
+    if (
+        preparationTimer
+    ) {
+
+        clearTimeout(
+            preparationTimer
+        );
+
+        preparationTimer =
+            null;
+
+    }
+
+
+    /*
+       Stop drying timer.
+    */
+
+    if (
+        timerInterval
+    ) {
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval =
+            null;
+
+    }
+
+
+    /*
+       Stop serial reader.
+    */
+
+    if (
+        reader
+    ) {
+
+
+        try {
+
+            await reader.cancel();
+
+        }
+        catch(e) {}
+
+
+    }
+
+
+    /*
+       Close port.
+    */
+
+    if (
+        port
+    ) {
+
+
+        try {
+
+            await port.close();
+
+        }
+        catch(e) {}
+
+
+    }
+
+
+    reader =
+        null;
+
+    writer =
+        null;
+
+    port =
+        null;
+
+
+    showConnectionScreen();
+
+}
+
+
+/* =========================================================
+   CONNECTION SCREEN AFTER DISCONNECT
+========================================================= */
+
+function showConnectionScreen() {
+
+
+    document.getElementById(
+        "dashboard"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "connectionScreen"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "connectionText"
+    ).innerText =
+        "ESP32-WROVER-B Not Connected";
+
+
+    document.getElementById(
+        "statusDot"
+    ).style.background =
+        "#d62828";
+
+
+    const button =
+        document.getElementById(
+            "connectButton"
+        );
+
+
+    button.disabled =
+        false;
+
+
+    button.innerText =
+        "Connect ESP32-WROVER-B";
+
+}
+
+
+/* =========================================================
+   UNEXPECTED USB DISCONNECTION
+========================================================= */
+
+function handleUnexpectedDisconnect() {
+
+
+    keepReading =
+        false;
+
+    verifiedESP =
+        false;
+
+
+    if (
+        timerInterval
+    ) {
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval =
+            null;
+
+    }
+
+
+    showConnectionScreen();
+
+}
+
+
+/* =========================================================
+   PHYSICAL SERIAL DISCONNECT EVENT
+========================================================= */
+
+if (
+    "serial"
+    in navigator
+) {
+
+
+    navigator.serial.addEventListener(
+        "disconnect",
+        event => {
+
+
+            if (
+                port
+            ) {
+
+                handleUnexpectedDisconnect();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+function delay(
+    ms
+) {
+
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
 
 </script>
+
 
 </body>
 </html>
