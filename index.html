@@ -19,9 +19,7 @@ body {
   color: #17352a;
 }
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================= HEADER ================= */
 
 .header {
   background: linear-gradient(135deg, #087f5b, #20a36a);
@@ -40,12 +38,9 @@ body {
 .header p {
   margin: 8px 0 0;
   font-size: 14px;
-  opacity: 0.95;
 }
 
-/* =====================================================
-   MAIN CONTAINER
-===================================================== */
+/* ================= CONTAINER ================= */
 
 .container {
   max-width: 950px;
@@ -53,9 +48,7 @@ body {
   padding: 30px 20px;
 }
 
-/* =====================================================
-   CARDS GRID
-===================================================== */
+/* ================= CARDS ================= */
 
 .cards {
   display: grid;
@@ -63,21 +56,12 @@ body {
   gap: 20px;
 }
 
-/* =====================================================
-   CARD
-===================================================== */
-
 .card {
   background: white;
   border-radius: 20px;
   padding: 32px 18px;
   text-align: center;
   box-shadow: 0 5px 18px rgba(0,0,0,0.10);
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
 }
 
 .icon {
@@ -104,13 +88,11 @@ body {
   color: #52605a;
 }
 
-/* =====================================================
-   BATTERY
-===================================================== */
+/* ================= BATTERY ================= */
 
 .batteryOuter {
   width: 85%;
-  height: 24px;
+  height: 22px;
   margin: 20px auto 5px;
   background: #e3e8e6;
   border-radius: 14px;
@@ -120,11 +102,7 @@ body {
 .batteryFill {
   height: 100%;
   width: 89%;
-  background: linear-gradient(
-    90deg,
-    #ff922b,
-    #20a36a
-  );
+  background: #20a36a;
   transition: width 1s ease;
 }
 
@@ -134,55 +112,28 @@ body {
   color: #66756f;
 }
 
-/* =====================================================
-   3 SECOND PREPARATION BAR
-===================================================== */
+/* ==========================================
+   SIMPLE TIMER PREPARATION
+========================================== */
 
 .preparationArea {
-  margin-top: 22px;
+  margin-top: 18px;
+}
+
+.simpleLine {
+  width: 75%;
+  height: 2px;
+  background: #087f5b;
+  margin: 14px auto;
 }
 
 .preparationText {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
-  color: #087f5b;
-  margin-bottom: 14px;
+  color: #52605a;
 }
 
-.prepareOuter {
-  width: 90%;
-  height: 18px;
-  background: #e3e8e6;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: auto;
-}
-
-.prepareFill {
-  width: 0%;
-  height: 100%;
-
-  background: linear-gradient(
-    90deg,
-    #ff922b,
-    #ffc107,
-    #20a36a
-  );
-
-  border-radius: 20px;
-
-  transition: width 3s linear;
-}
-
-.prepareSeconds {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #6b7772;
-}
-
-/* =====================================================
-   TIMER
-===================================================== */
+/* ================= TIMER ================= */
 
 .timerArea {
   display: none;
@@ -191,7 +142,7 @@ body {
 .timerValue {
   font-size: 54px;
   font-weight: bold;
-  color: #e67e22;
+  color: #087f5b;
   letter-spacing: 3px;
 }
 
@@ -199,18 +150,15 @@ body {
   margin-top: 15px;
   font-size: 14px;
   font-weight: bold;
-  color: #087f5b;
+  color: #68746f;
 }
 
 .timerComplete {
   color: #087f5b;
   font-size: 17px;
-  font-weight: bold;
 }
 
-/* =====================================================
-   SYSTEM STATUS
-===================================================== */
+/* ================= STATUS ================= */
 
 .status {
   margin-top: 28px;
@@ -233,9 +181,7 @@ body {
   margin-right: 7px;
 }
 
-/* =====================================================
-   FOOTER
-===================================================== */
+/* ================= FOOTER ================= */
 
 .footer {
   text-align: center;
@@ -244,9 +190,7 @@ body {
   color: #7b8983;
 }
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width: 700px) {
 
@@ -265,15 +209,11 @@ body {
 
 <body>
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- ================= HEADER ================= -->
 
 <div class="header">
 
-  <h1>
-    SUNCONFLUENCE SMART SOLAR DRYER
-  </h1>
+  <h1>SUNCONFLUENCE SMART SOLAR DRYER</h1>
 
   <p>
     Temperature • Humidity • Battery • Drying Monitoring
@@ -282,237 +222,190 @@ body {
 </div>
 
 
-<!-- =====================================================
-     MAIN DASHBOARD
-===================================================== -->
-
 <div class="container">
 
-  <div class="cards">
+<div class="cards">
 
 
-    <!-- =================================================
-         TEMPERATURE
-    ================================================== -->
+<!-- ================= TEMPERATURE ================= -->
 
-    <div class="card">
+<div class="card">
 
-      <div class="icon">
-        🌡️
-      </div>
+  <div class="icon">🌡️</div>
 
-      <div class="title">
-        TEMPERATURE
-      </div>
+  <div class="title">
+    TEMPERATURE
+  </div>
 
-      <span
-        class="value"
-        id="temperature">
-        29.2
-      </span>
+  <span
+    class="value"
+    id="temperature">
+    29.2
+  </span>
 
-      <span class="unit">
-        °C
-      </span>
+  <span class="unit">
+    °C
+  </span>
 
-    </div>
+</div>
 
 
-    <!-- =================================================
-         HUMIDITY
-    ================================================== -->
+<!-- ================= HUMIDITY ================= -->
 
-    <div class="card">
+<div class="card">
 
-      <div class="icon">
-        💧
-      </div>
+  <div class="icon">💧</div>
 
-      <div class="title">
-        HUMIDITY
-      </div>
+  <div class="title">
+    HUMIDITY
+  </div>
 
-      <span
-        class="value"
-        id="humidity">
-        74
-      </span>
+  <span
+    class="value"
+    id="humidity">
+    74
+  </span>
 
-      <span class="unit">
-        %
-      </span>
+  <span class="unit">
+    %
+  </span>
 
-    </div>
+</div>
 
 
-    <!-- =================================================
-         BATTERY
-    ================================================== -->
+<!-- ================= BATTERY ================= -->
 
-    <div class="card">
+<div class="card">
 
-      <div class="icon">
-        🔋
-      </div>
+  <div class="icon">🔋</div>
 
-      <div class="title">
-        BATTERY LEVEL
-      </div>
+  <div class="title">
+    BATTERY LEVEL
+  </div>
 
-      <span
-        class="value"
-        id="battery">
-        89
-      </span>
+  <span
+    class="value"
+    id="battery">
+    89
+  </span>
 
-      <span class="unit">
-        %
-      </span>
+  <span class="unit">
+    %
+  </span>
 
 
-      <div class="batteryOuter">
+  <div class="batteryOuter">
 
-        <div
-          class="batteryFill"
-          id="batteryFill"
-          style="width:89%">
-        </div>
-
-      </div>
-
-
-      <div
-        class="batteryText"
-        id="batteryStatus">
-
-        Battery Status: GOOD
-
-      </div>
-
-    </div>
-
-
-    <!-- =================================================
-         DRYING TIMER CARD
-    ================================================== -->
-
-    <div class="card">
-
-      <div class="icon">
-        ⏱️
-      </div>
-
-      <div class="title">
-        DRYING TIMER
-      </div>
-
-
-      <!-- ===============================================
-           FIRST 3 SECONDS PROGRESS BAR
-      ================================================ -->
-
-      <div
-        class="preparationArea"
-        id="preparationArea">
-
-        <div class="preparationText">
-          Preparing Drying Cycle
-        </div>
-
-
-        <div class="prepareOuter">
-
-          <div
-            class="prepareFill"
-            id="prepareFill">
-          </div>
-
-        </div>
-
-
-        <div
-          class="prepareSeconds"
-          id="prepareSeconds">
-
-          Initializing...
-
-        </div>
-
-      </div>
-
-
-      <!-- ===============================================
-           TIMER APPEARS AFTER 3 SECONDS
-      ================================================ -->
-
-      <div
-        class="timerArea"
-        id="timerArea">
-
-        <div
-          class="timerValue"
-          id="timerDisplay">
-
-          01:30
-
-        </div>
-
-
-        <div
-          class="timerStatus"
-          id="timerStatus">
-
-          Drying cycle started
-
-        </div>
-
-      </div>
-
-
+    <div
+      class="batteryFill"
+      id="batteryFill"
+      style="width:89%">
     </div>
 
   </div>
 
 
-  <!-- =================================================
-       SYSTEM STATUS
-  ================================================== -->
+  <div
+    class="batteryText"
+    id="batteryStatus">
 
-  <div class="status">
-
-    <span class="onlineDot"></span>
-
-    <span id="systemStatus">
-
-      Smart Solar Dryer Dashboard Online
-
-    </span>
-
-  </div>
-
-
-  <!-- =================================================
-       FOOTER
-  ================================================== -->
-
-  <div class="footer">
-
-    Team SunConfluence • Smart Solar-Powered Dryer Monitoring System
+    Battery Status: GOOD
 
   </div>
 
 </div>
 
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
+<!-- ================= TIMER ================= -->
+
+<div class="card">
+
+  <div class="icon">
+    ⏱️
+  </div>
+
+  <div class="title">
+    DRYING TIMER
+  </div>
+
+
+  <!-- FIRST 3 SECONDS -->
+
+  <div
+    class="preparationArea"
+    id="preparationArea">
+
+    <div class="simpleLine"></div>
+
+    <div class="preparationText">
+      Preparing Drying Cycle
+    </div>
+
+    <div class="simpleLine"></div>
+
+  </div>
+
+
+  <!-- TIMER -->
+
+  <div
+    class="timerArea"
+    id="timerArea">
+
+    <div
+      class="timerValue"
+      id="timerDisplay">
+
+      01:30
+
+    </div>
+
+
+    <div
+      class="timerStatus"
+      id="timerStatus">
+
+      Drying Cycle in Progress
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</div>
+
+
+<!-- ================= SYSTEM STATUS ================= -->
+
+<div class="status">
+
+  <span class="onlineDot"></span>
+
+  <span id="systemStatus">
+    Smart Solar Dryer Dashboard Online
+  </span>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<div class="footer">
+
+  Team SunConfluence • Smart Solar-Powered Dryer Monitoring System
+
+</div>
+
+
+</div>
+
+
 
 <script>
 
-/* =====================================================
-   CLAMP FUNCTION
-===================================================== */
+/* ================= CLAMP ================= */
 
 function clamp(value, min, max) {
 
@@ -524,46 +417,30 @@ function clamp(value, min, max) {
 }
 
 
-/* =====================================================
-   BATTERY CONFIGURATION
-===================================================== */
+/* ================= BATTERY ================= */
 
 const startingBattery = 89;
 
-
-/*
-Battery drops only 1%
-every 15 minutes.
-*/
-
 const batteryDropInterval =
   15 * 60 * 1000;
-
 
 const dashboardStartTime =
   Date.now();
 
 
-/* =====================================================
-   SENSOR + BATTERY DASHBOARD
-===================================================== */
+/* ================= SENSOR DATA ================= */
 
 function updateDashboard() {
-
 
   const t =
     Date.now() / 1000;
 
 
-  /* =================================================
-     TEMPERATURE
-     Target: approximately 28–30°C
-  ================================================= */
+  /* Temperature 28–30°C */
 
   let temperature =
-    29.0 +
+    29 +
     Math.sin(t / 9) * 0.8;
-
 
   temperature =
     clamp(
@@ -573,15 +450,11 @@ function updateDashboard() {
     );
 
 
-  /* =================================================
-     HUMIDITY
-     Target: approximately 73–75%
-  ================================================= */
+  /* Humidity 73–75% */
 
   let humidity =
     74 +
     Math.sin(t / 11) * 0.9;
-
 
   humidity =
     clamp(
@@ -591,14 +464,11 @@ function updateDashboard() {
     );
 
 
-  /* =================================================
-     BATTERY
-  ================================================= */
+  /* Battery */
 
   const elapsedTime =
     Date.now() -
     dashboardStartTime;
-
 
   const batteryDrop =
     Math.floor(
@@ -606,11 +476,9 @@ function updateDashboard() {
       batteryDropInterval
     );
 
-
   let battery =
     startingBattery -
     batteryDrop;
-
 
   battery =
     clamp(
@@ -620,12 +488,7 @@ function updateDashboard() {
     );
 
 
-  /* =================================================
-     BATTERY STATUS
-  ================================================= */
-
   let batteryStatus;
-
 
   if (battery >= 80) {
 
@@ -655,10 +518,6 @@ function updateDashboard() {
 
   }
 
-
-  /* =================================================
-     UPDATE VALUES
-  ================================================= */
 
   document
     .getElementById("temperature")
@@ -692,75 +551,53 @@ function updateDashboard() {
 }
 
 
-/* =====================================================
-   TIMER SETTINGS
-===================================================== */
 
-/*
-1 minute 30 seconds
-=
-90 seconds
-*/
+/* ==================================================
+   TIMER
+================================================== */
 
 let timerSeconds = 90;
 
 let timerInterval = null;
 
 
-/* =====================================================
-   UPDATE TIMER DISPLAY
-===================================================== */
-
 function updateTimerDisplay() {
-
 
   const minutes =
     Math.floor(
       timerSeconds / 60
     );
 
-
   const seconds =
     timerSeconds % 60;
 
 
-  const formattedMinutes =
+  const mm =
     String(minutes)
-      .padStart(2, "0");
+    .padStart(2, "0");
 
 
-  const formattedSeconds =
+  const ss =
     String(seconds)
-      .padStart(2, "0");
+    .padStart(2, "0");
 
 
   document
     .getElementById("timerDisplay")
     .textContent =
-      formattedMinutes +
-      ":" +
-      formattedSeconds;
+      mm + ":" + ss;
 
 }
 
 
-/* =====================================================
-   START COUNTDOWN
-===================================================== */
+/* ================= START TIMER ================= */
 
 function startDryingTimer() {
-
 
   document
     .getElementById("systemStatus")
     .textContent =
       "Drying Cycle in Progress";
-
-
-  document
-    .getElementById("timerStatus")
-    .textContent =
-      "Drying cycle in progress";
 
 
   updateTimerDisplay();
@@ -775,12 +612,9 @@ function startDryingTimer() {
 
       if (timerSeconds <= 0) {
 
-
         timerSeconds = 0;
 
-
         updateTimerDisplay();
-
 
         clearInterval(
           timerInterval
@@ -819,121 +653,50 @@ function startDryingTimer() {
 }
 
 
-/* =====================================================
-   3 SECOND PREPARATION BAR
-===================================================== */
 
-function startPreparationBar() {
+/* ==================================================
+   WAIT 3 SECONDS
+================================================== */
 
-
-  const prepareFill =
-    document.getElementById(
-      "prepareFill"
-    );
+setTimeout(function() {
 
 
-  const prepareSeconds =
-    document.getElementById(
-      "prepareSeconds"
-    );
+  /* Hide two lines */
+
+  document
+    .getElementById("preparationArea")
+    .style.display =
+      "none";
 
 
-  /*
-  Trigger animation after page has rendered.
-  */
+  /* Show timer */
 
-  setTimeout(function() {
-
-    prepareFill.style.width =
-      "100%";
-
-  }, 50);
+  document
+    .getElementById("timerArea")
+    .style.display =
+      "block";
 
 
-  /*
-  Display preparation countdown text.
-  */
+  /* Start countdown */
 
-  prepareSeconds.textContent =
-    "Starting in 3 seconds...";
+  startDryingTimer();
 
 
-  setTimeout(function() {
-
-    prepareSeconds.textContent =
-      "Starting in 2 seconds...";
-
-  }, 1000);
+}, 3000);
 
 
-  setTimeout(function() {
 
-    prepareSeconds.textContent =
-      "Starting in 1 second...";
-
-  }, 2000);
-
-
-  /*
-  At exactly 3 seconds:
-
-  hide preparation bar
-  show timer
-  begin countdown
-  */
-
-  setTimeout(function() {
-
-
-    document
-      .getElementById(
-        "preparationArea"
-      )
-      .style.display =
-        "none";
-
-
-    document
-      .getElementById(
-        "timerArea"
-      )
-      .style.display =
-        "block";
-
-
-    startDryingTimer();
-
-
-  }, 3000);
-
-}
-
-
-/* =====================================================
-   START DASHBOARD
-===================================================== */
+/* ================= INITIALIZE ================= */
 
 updateDashboard();
 
 updateTimerDisplay();
 
 
-/*
-Update environmental readings
-every 2 seconds.
-*/
-
 setInterval(
   updateDashboard,
   2000
 );
-
-
-/*
-Start 3-second loading bar immediately.
-*/
-
-startPreparationBar();
 
 </script>
 
