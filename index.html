@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Solar Dryer</title>
+<title>Smart Solar Dryer Dashboard</title>
 
 <style>
 
@@ -15,86 +15,95 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f2f7f5;
+  background: #f1f7f4;
   color: #17352a;
 }
 
-/* ---------------- HEADER ---------------- */
+/* ================= HEADER ================= */
 
 .header {
   background: linear-gradient(135deg, #087f5b, #20a36a);
   color: white;
-  padding: 25px;
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  padding: 28px 15px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
 }
 
 .header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 30px;
+  letter-spacing: 1px;
 }
 
 .header p {
-  margin: 7px 0 0;
+  margin: 8px 0 0;
   font-size: 14px;
+  opacity: 0.95;
 }
 
-/* ---------------- MAIN CONTAINER ---------------- */
+/* ================= CONTAINER ================= */
 
 .container {
   max-width: 900px;
   margin: auto;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
-/* ---------------- CARDS ---------------- */
+/* ================= GRID ================= */
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
+
+/* ================= CARD ================= */
 
 .card {
   background: white;
-  border-radius: 18px;
-  padding: 28px 15px;
+  border-radius: 20px;
+  padding: 32px 18px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-  transition: transform 0.3s ease;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.10);
+  transition: 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+}
+
+.icon {
+  font-size: 35px;
+  margin-bottom: 10px;
 }
 
 .title {
   font-size: 14px;
   font-weight: bold;
-  color: #68746f;
+  color: #66756f;
+  letter-spacing: 0.6px;
   margin-bottom: 15px;
-  letter-spacing: 0.5px;
 }
 
 .value {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: bold;
   color: #087f5b;
 }
 
 .unit {
-  font-size: 18px;
+  font-size: 20px;
   color: #52605a;
 }
 
-/* ---------------- BATTERY ---------------- */
+/* ================= BATTERY ================= */
 
 .batteryOuter {
-  width: 80%;
-  height: 22px;
-  margin: 15px auto 5px auto;
-  background: #e4e8e6;
-  border-radius: 12px;
+  width: 85%;
+  height: 24px;
+  margin: 20px auto 5px;
+  background: #e3e8e6;
+  border-radius: 14px;
   overflow: hidden;
 }
 
@@ -106,43 +115,57 @@ body {
     #ff922b,
     #20a36a
   );
-
   transition: width 1s ease;
 }
 
-/* ---------------- SMALL INFORMATION ---------------- */
-
-.small {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #52605a;
+.batteryText {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #66756f;
 }
 
-/* ---------------- STATUS ---------------- */
+/* ================= STATUS ================= */
 
 .status {
-  margin-top: 20px;
+  margin-top: 28px;
+  padding: 15px;
+  background: white;
+  border-radius: 14px;
   text-align: center;
-  font-size: 13px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   color: #087f5b;
   font-weight: bold;
+  font-size: 14px;
 }
 
-/* ---------------- FOOTER ---------------- */
+.onlineDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #20a36a;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+/* ================= FOOTER ================= */
 
 .footer {
   text-align: center;
   margin-top: 25px;
   font-size: 12px;
-  color: #7c8983;
+  color: #7b8983;
 }
 
-/* ---------------- MOBILE ---------------- */
+/* ================= MOBILE ================= */
 
-@media(max-width:650px) {
+@media(max-width: 750px) {
 
   .cards {
     grid-template-columns: 1fr;
+  }
+
+  .header h1 {
+    font-size: 24px;
   }
 
 }
@@ -152,104 +175,68 @@ body {
 
 <body>
 
-<!-- ===================================================== -->
-<!-- HEADER -->
-<!-- ===================================================== -->
+
+<!-- ================= HEADER ================= -->
 
 <div class="header">
 
-  <h1>SMART SOLAR DRYER</h1>
+  <h1>SUNCONFLUENCE SMART SOLAR DRYER</h1>
 
   <p>
-    Environmental & Battery Monitoring
+    Live Temperature • Humidity • Battery Monitoring
   </p>
 
 </div>
 
 
-<!-- ===================================================== -->
-<!-- DASHBOARD -->
-<!-- ===================================================== -->
+<!-- ================= MAIN ================= -->
 
 <div class="container">
+
 
   <div class="cards">
 
 
-    <!-- ================= UPPER TEMPERATURE ================= -->
+    <!-- ================= TEMPERATURE ================= -->
 
     <div class="card">
 
+      <div class="icon">
+        🌡️
+      </div>
+
       <div class="title">
-        UPPER TEMPERATURE
+        TEMPERATURE
       </div>
 
       <span
         class="value"
-        id="upperTemp">
+        id="temperature">
         29.2
       </span>
 
       <span class="unit">
-        &deg;C
+        °C
       </span>
 
     </div>
 
 
-    <!-- ================= LOWER TEMPERATURE ================= -->
+    <!-- ================= HUMIDITY ================= -->
 
     <div class="card">
 
+      <div class="icon">
+        💧
+      </div>
+
       <div class="title">
-        LOWER TEMPERATURE
+        HUMIDITY
       </div>
 
       <span
         class="value"
-        id="lowerTemp">
-        28.8
-      </span>
-
-      <span class="unit">
-        &deg;C
-      </span>
-
-    </div>
-
-
-    <!-- ================= UPPER HUMIDITY ================= -->
-
-    <div class="card">
-
-      <div class="title">
-        UPPER HUMIDITY
-      </div>
-
-      <span
-        class="value"
-        id="upperHumidity">
-        74
-      </span>
-
-      <span class="unit">
-        %
-      </span>
-
-    </div>
-
-
-    <!-- ================= LOWER HUMIDITY ================= -->
-
-    <div class="card">
-
-      <div class="title">
-        LOWER HUMIDITY
-      </div>
-
-      <span
-        class="value"
-        id="lowerHumidity">
+        id="humidity">
         74
       </span>
 
@@ -264,8 +251,12 @@ body {
 
     <div class="card">
 
+      <div class="icon">
+        🔋
+      </div>
+
       <div class="title">
-        BATTERY STATUS
+        BATTERY LEVEL
       </div>
 
       <span
@@ -290,79 +281,10 @@ body {
       </div>
 
 
-      <div class="small">
-
-        Battery Voltage:
-
-        <b>
-          <span id="voltage">
-            12.60
-          </span>
-          V
-        </b>
-
-      </div>
-
-
-      <div class="small">
-
-        Estimated Remaining Energy:
-
-        <b>
-          <span id="energy">
-            277.7
-          </span>
-          Wh
-        </b>
-
-      </div>
-
-    </div>
-
-
-    <!-- ================= SYSTEM LOAD ================= -->
-
-    <div class="card">
-
-      <div class="title">
-        SYSTEM LOAD
-      </div>
-
-      <span
-        class="value"
-        id="power">
-        40.0
-      </span>
-
-      <span class="unit">
-        W
-      </span>
-
-
-      <div class="small">
-
-        Current:
-
-        <b>
-          <span id="current">
-            3.17
-          </span>
-          A
-        </b>
-
-      </div>
-
-
-      <div class="small">
-
-        Heater:
-
-        <b>
-          <span id="heater">
-            ON
-          </span>
-        </b>
-
+      <div
+        class="batteryText"
+        id="batteryStatus">
+        Battery Status: GOOD
       </div>
 
     </div>
@@ -375,7 +297,9 @@ body {
 
   <div class="status">
 
-    ● Smart Solar Dryer Dashboard Online
+    <span class="onlineDot"></span>
+
+    Smart Solar Dryer Dashboard Online
 
   </div>
 
@@ -384,7 +308,7 @@ body {
 
   <div class="footer">
 
-    SunConfluence Smart Solar-Powered Dryer Monitoring System
+    Team SunConfluence • Smart Solar-Powered Dryer Monitoring System
 
   </div>
 
@@ -393,16 +317,16 @@ body {
 
 
 
-<!-- ===================================================== -->
+<!-- ========================================================= -->
 <!-- JAVASCRIPT -->
-<!-- ===================================================== -->
+<!-- ========================================================= -->
 
 <script>
 
 
-/* =========================================================
-   CLAMP FUNCTION
-   ========================================================= */
+/* ============================================================
+   LIMIT VALUES
+   ============================================================ */
 
 function clamp(value, min, max) {
 
@@ -414,154 +338,96 @@ function clamp(value, min, max) {
 }
 
 
-/* =========================================================
-   BATTERY SETTINGS
-   ========================================================= */
-
-/*
-Battery starts from 89%.
-
-Battery should decrease only 1%
-after every 15 minutes.
-*/
+/* ============================================================
+   STARTING BATTERY
+   ============================================================ */
 
 const startingBattery = 89;
 
 
-/*
-15 minutes
-=
-15 × 60 × 1000 milliseconds
-*/
+/* ============================================================
+   BATTERY DROP INTERVAL
+
+   1% every 15 minutes
+   ============================================================ */
 
 const batteryDropInterval =
   15 * 60 * 1000;
 
 
-/*
-Time when dashboard was started.
-*/
+/* ============================================================
+   DASHBOARD START TIME
+   ============================================================ */
 
 const dashboardStartTime =
   Date.now();
 
 
 
-/* =========================================================
-   DASHBOARD UPDATE FUNCTION
-   ========================================================= */
+/* ============================================================
+   UPDATE DASHBOARD
+   ============================================================ */
 
 function updateDashboard() {
 
-
-  /*
-  Current time used to create
-  smooth realistic sensor movement.
-  */
 
   const t =
     Date.now() / 1000;
 
 
 
-  /* =======================================================
-     UPPER TEMPERATURE
-     Target approximately 28.5°C – 30°C
-     ======================================================= */
+  /* =========================================================
+     TEMPERATURE
 
-  let upperTemp =
-    29.25 +
-    Math.sin(t / 8) * 0.65;
+     Approximately 28°C to 30°C
+     ========================================================= */
+
+  let temperature =
+    29.0 +
+    Math.sin(t / 9) * 0.8;
 
 
-  upperTemp =
+  temperature =
     clamp(
-      upperTemp,
-      28.5,
+      temperature,
+      28.0,
       30.0
     );
 
 
 
-  /* =======================================================
-     LOWER TEMPERATURE
-     Target approximately 28°C – 29.5°C
-     ======================================================= */
+  /* =========================================================
+     HUMIDITY
 
-  let lowerTemp =
-    28.75 +
-    Math.sin(
-      t / 9 + 0.8
-    ) * 0.60;
+     Approximately 73% to 75%
+     ========================================================= */
 
-
-  lowerTemp =
-    clamp(
-      lowerTemp,
-      28.0,
-      29.5
-    );
-
-
-
-  /* =======================================================
-     UPPER HUMIDITY
-     Target approximately 73 – 75 %
-     ======================================================= */
-
-  let upperHumidity =
+  let humidity =
     74 +
-    Math.sin(t / 10) * 0.8;
+    Math.sin(t / 11) * 0.9;
 
 
-  upperHumidity =
+  humidity =
     clamp(
-      upperHumidity,
+      humidity,
       73,
       75
     );
 
 
 
-  /* =======================================================
-     LOWER HUMIDITY
-     Target approximately 73 – 75 %
-     ======================================================= */
+  /* =========================================================
+     BATTERY
 
-  let lowerHumidity =
-    74 +
-    Math.sin(
-      t / 11 + 0.5
-    ) * 0.9;
+     Starts at 89%
 
-
-  lowerHumidity =
-    clamp(
-      lowerHumidity,
-      73,
-      75
-    );
-
-
-
-  /* =======================================================
-     BATTERY CALCULATION
-     ======================================================= */
-
-
-  /*
-  Find elapsed time since dashboard started.
-  */
+     Drops only 1% every 15 minutes
+     ========================================================= */
 
   const elapsedTime =
     Date.now() -
     dashboardStartTime;
 
-
-  /*
-  Every completed 15-minute period
-  reduces battery by 1%.
-  */
 
   const batteryDrop =
     Math.floor(
@@ -584,168 +450,74 @@ function updateDashboard() {
 
 
 
-  /* =======================================================
-     BATTERY VOLTAGE
-     ======================================================= */
+  /* =========================================================
+     BATTERY STATUS TEXT
+     ========================================================= */
+
+  let batteryStatus;
 
 
-  /*
-  Simulated approximate
-  12 V battery voltage.
-  */
+  if (battery >= 80) {
 
-  let voltage =
-    11.8 +
-    (battery / 100) * 0.9;
+    batteryStatus =
+      "Battery Status: GOOD";
 
+  }
 
-  voltage =
-    clamp(
-      voltage,
-      11.8,
-      12.7
-    );
+  else if (battery >= 50) {
 
+    batteryStatus =
+      "Battery Status: NORMAL";
 
+  }
 
-  /* =======================================================
-     BATTERY ENERGY
-     ======================================================= */
+  else if (battery >= 20) {
 
-
-  /*
-  Battery used in prototype:
-
-  12 V × 26 Ah
-  =
-  approximately 312 Wh
-  */
-
-
-  const batteryCapacityWh =
-    312;
-
-
-  const energy =
-    (battery / 100) *
-    batteryCapacityWh;
-
-
-
-  /* =======================================================
-     SYSTEM POWER
-     ======================================================= */
-
-
-  /*
-  Small natural fluctuation
-  around approximately 40 W.
-  */
-
-
-  let power =
-    40 +
-    Math.sin(t / 6) * 2;
-
-
-  power =
-    clamp(
-      power,
-      38,
-      42
-    );
-
-
-
-  /* =======================================================
-     SYSTEM CURRENT
-     ======================================================= */
-
-
-  const current =
-    power /
-    voltage;
-
-
-
-  /* =======================================================
-     HEATER STATUS
-     ======================================================= */
-
-
-  let heater;
-
-
-  /*
-  During this demonstration:
-
-  Below 29.5°C
-  heater is shown ON.
-
-  Above 29.5°C
-  heater enters STANDBY.
-  */
-
-
-  if (upperTemp < 29.5) {
-
-    heater = "ON";
+    batteryStatus =
+      "Battery Status: LOW";
 
   }
 
   else {
 
-    heater = "STANDBY";
+    batteryStatus =
+      "Battery Status: CRITICAL";
 
   }
 
 
 
-  /* =======================================================
-     UPDATE TEMPERATURE DISPLAY
-     ======================================================= */
-
-
-  document
-    .getElementById("upperTemp")
-    .textContent =
-      upperTemp.toFixed(1);
-
+  /* =========================================================
+     UPDATE TEMPERATURE
+     ========================================================= */
 
   document
-    .getElementById("lowerTemp")
+    .getElementById("temperature")
     .textContent =
-      lowerTemp.toFixed(1);
+      temperature.toFixed(1);
 
 
 
-  /* =======================================================
-     UPDATE HUMIDITY DISPLAY
-     ======================================================= */
-
+  /* =========================================================
+     UPDATE HUMIDITY
+     ========================================================= */
 
   document
-    .getElementById("upperHumidity")
+    .getElementById("humidity")
     .textContent =
-      upperHumidity.toFixed(0);
-
-
-  document
-    .getElementById("lowerHumidity")
-    .textContent =
-      lowerHumidity.toFixed(0);
+      humidity.toFixed(0);
 
 
 
-  /* =======================================================
-     UPDATE BATTERY DISPLAY
-     ======================================================= */
-
+  /* =========================================================
+     UPDATE BATTERY
+     ========================================================= */
 
   document
     .getElementById("battery")
     .textContent =
-      battery.toFixed(0);
+      battery;
+
 
 
   document
@@ -755,70 +527,17 @@ function updateDashboard() {
 
 
 
-  /* =======================================================
-     UPDATE VOLTAGE
-     ======================================================= */
-
-
   document
-    .getElementById("voltage")
+    .getElementById("batteryStatus")
     .textContent =
-      voltage.toFixed(2);
-
-
-
-  /* =======================================================
-     UPDATE ENERGY
-     ======================================================= */
-
-
-  document
-    .getElementById("energy")
-    .textContent =
-      energy.toFixed(1);
-
-
-
-  /* =======================================================
-     UPDATE POWER
-     ======================================================= */
-
-
-  document
-    .getElementById("power")
-    .textContent =
-      power.toFixed(1);
-
-
-
-  /* =======================================================
-     UPDATE CURRENT
-     ======================================================= */
-
-
-  document
-    .getElementById("current")
-    .textContent =
-      current.toFixed(2);
-
-
-
-  /* =======================================================
-     UPDATE HEATER STATUS
-     ======================================================= */
-
-
-  document
-    .getElementById("heater")
-    .textContent =
-      heater;
+      batteryStatus;
 
 }
 
 
-/* =========================================================
-   UPDATE EVERY 2 SECONDS
-   ========================================================= */
+/* ============================================================
+   UPDATE VALUES EVERY 2 SECONDS
+   ============================================================ */
 
 setInterval(
   updateDashboard,
@@ -826,14 +545,15 @@ setInterval(
 );
 
 
-/* =========================================================
+/* ============================================================
    INITIAL UPDATE
-   ========================================================= */
+   ============================================================ */
 
 updateDashboard();
 
 
 </script>
+
 
 </body>
 </html>
