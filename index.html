@@ -131,6 +131,12 @@ body {
   color: #52605a;
 }
 
+.prepareCounter {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #7b8983;
+}
+
 /* ================= TIMER ================= */
 
 .timerArea {
@@ -212,11 +218,14 @@ body {
 
 <body>
 
+
 <!-- ================= HEADER ================= -->
 
 <div class="header">
 
-  <h1>SUNCONFLUENCE SMART SOLAR DRYER</h1>
+  <h1>
+    SUNCONFLUENCE SMART SOLAR DRYER
+  </h1>
 
   <p>
     Temperature • Humidity • Battery • Agarbatti Drying Monitor
@@ -230,11 +239,15 @@ body {
 <div class="cards">
 
 
-<!-- ================= TEMPERATURE ================= -->
+<!-- =================================================
+     TEMPERATURE
+================================================== -->
 
 <div class="card">
 
-  <div class="icon">🌡️</div>
+  <div class="icon">
+    🌡️
+  </div>
 
   <div class="title">
     TEMPERATURE
@@ -253,11 +266,15 @@ body {
 </div>
 
 
-<!-- ================= HUMIDITY ================= -->
+<!-- =================================================
+     HUMIDITY
+================================================== -->
 
 <div class="card">
 
-  <div class="icon">💧</div>
+  <div class="icon">
+    💧
+  </div>
 
   <div class="title">
     HUMIDITY
@@ -276,11 +293,15 @@ body {
 </div>
 
 
-<!-- ================= BATTERY ================= -->
+<!-- =================================================
+     BATTERY
+================================================== -->
 
 <div class="card">
 
-  <div class="icon">🔋</div>
+  <div class="icon">
+    🔋
+  </div>
 
   <div class="title">
     BATTERY LEVEL
@@ -319,7 +340,9 @@ body {
 </div>
 
 
-<!-- ================= DRYING TIMER ================= -->
+<!-- =================================================
+     AGARBATTI DRYING TIMER
+================================================== -->
 
 <div class="card">
 
@@ -332,7 +355,9 @@ body {
   </div>
 
 
-  <!-- FIRST 3 SECONDS -->
+  <!-- ===============================
+       FIRST 5 SECONDS
+  ================================ -->
 
   <div
     class="preparationArea"
@@ -344,12 +369,22 @@ body {
       Preparing Agarbatti Drying Cycle
     </div>
 
+    <div
+      class="prepareCounter"
+      id="prepareCounter">
+
+      Starting in 5 seconds...
+
+    </div>
+
     <div class="simpleLine"></div>
 
   </div>
 
 
-  <!-- TIMER -->
+  <!-- ===============================
+       MAIN 3-HOUR TIMER
+  ================================ -->
 
   <div
     class="timerArea"
@@ -380,26 +415,33 @@ body {
 </div>
 
 
-<!-- ================= SYSTEM STATUS ================= -->
+<!-- =================================================
+     SYSTEM STATUS
+================================================== -->
 
 <div class="status">
 
   <span class="onlineDot"></span>
 
   <span id="systemStatus">
+
     Smart Solar Dryer Dashboard Online
+
   </span>
 
 </div>
 
 
-<!-- ================= FOOTER ================= -->
+<!-- =================================================
+     FOOTER
+================================================== -->
 
 <div class="footer">
 
   Team SunConfluence • Smart Solar-Powered Agarbatti Drying System
 
 </div>
+
 
 </div>
 
@@ -408,7 +450,7 @@ body {
 <script>
 
 /* =====================================================
-   GENERAL FUNCTION
+   GENERAL CLAMP FUNCTION
 ===================================================== */
 
 function clamp(value, min, max) {
@@ -427,36 +469,42 @@ function clamp(value, min, max) {
 
 const startingBattery = 89;
 
+
 /*
-Battery decreases by 1%
+Battery drops only 1%
 after every 15 minutes.
 */
 
 const batteryDropInterval =
   15 * 60 * 1000;
 
+
 const dashboardStartTime =
   Date.now();
 
 
+
 /* =====================================================
-   SENSOR + BATTERY UPDATE
+   TEMPERATURE + HUMIDITY + BATTERY
 ===================================================== */
 
 function updateDashboard() {
+
 
   const t =
     Date.now() / 1000;
 
 
-  /* ---------------- TEMPERATURE ----------------
-     Current simulated environmental reading
-     approximately 28–30°C
-  */
+  /* =================================================
+     TEMPERATURE
+
+     approximately 28°C to 30°C
+  ================================================= */
 
   let temperature =
     29 +
     Math.sin(t / 9) * 0.8;
+
 
   temperature =
     clamp(
@@ -466,13 +514,16 @@ function updateDashboard() {
     );
 
 
-  /* ---------------- HUMIDITY ----------------
-     Approximately 73–75%
-  */
+  /* =================================================
+     HUMIDITY
+
+     approximately 73% to 75%
+  ================================================= */
 
   let humidity =
     74 +
     Math.sin(t / 11) * 0.9;
+
 
   humidity =
     clamp(
@@ -482,11 +533,14 @@ function updateDashboard() {
     );
 
 
-  /* ---------------- BATTERY ---------------- */
+  /* =================================================
+     BATTERY
+  ================================================= */
 
   const elapsedTime =
     Date.now() -
     dashboardStartTime;
+
 
   const batteryDrop =
     Math.floor(
@@ -494,9 +548,11 @@ function updateDashboard() {
       batteryDropInterval
     );
 
+
   let battery =
     startingBattery -
     batteryDrop;
+
 
   battery =
     clamp(
@@ -506,9 +562,12 @@ function updateDashboard() {
     );
 
 
-  /* ---------------- BATTERY STATUS ---------------- */
+  /* =================================================
+     BATTERY STATUS
+  ================================================= */
 
   let batteryStatus;
+
 
   if (battery >= 80) {
 
@@ -539,7 +598,9 @@ function updateDashboard() {
   }
 
 
-  /* ---------------- UPDATE DISPLAY ---------------- */
+  /* =================================================
+     UPDATE DISPLAY
+  ================================================= */
 
   document
     .getElementById("temperature")
@@ -573,16 +634,13 @@ function updateDashboard() {
 }
 
 
+
 /* =====================================================
    AGARBATTI DRYING TIMER
 ===================================================== */
 
 /*
-Expected initial drying period:
-
 3 hours
-
-3 × 60 × 60
 =
 10800 seconds
 */
@@ -590,7 +648,10 @@ Expected initial drying period:
 let timerSeconds =
   3 * 60 * 60;
 
-let timerInterval = null;
+
+let timerInterval =
+  null;
+
 
 
 /* =====================================================
@@ -598,6 +659,7 @@ let timerInterval = null;
 ===================================================== */
 
 function updateTimerDisplay() {
+
 
   const hours =
     Math.floor(
@@ -642,11 +704,13 @@ function updateTimerDisplay() {
 }
 
 
+
 /* =====================================================
-   START DRYING TIMER
+   START 3-HOUR DRYING TIMER
 ===================================================== */
 
 function startDryingTimer() {
+
 
   document
     .getElementById("systemStatus")
@@ -671,14 +735,17 @@ function startDryingTimer() {
 
 
       /* =============================================
-         INITIAL 3-HOUR PERIOD COMPLETE
+         WHEN 3 HOURS COMPLETE
       ============================================= */
 
       if (timerSeconds <= 0) {
 
+
         timerSeconds = 0;
 
+
         updateTimerDisplay();
+
 
         clearInterval(
           timerInterval
@@ -701,7 +768,7 @@ function startDryingTimer() {
         document
           .getElementById("systemStatus")
           .textContent =
-            "Initial Drying Period Complete • Verify RH / Product Dryness";
+            "Initial Drying Complete • Verify Product Dryness";
 
 
         return;
@@ -717,29 +784,89 @@ function startDryingTimer() {
 }
 
 
+
 /* =====================================================
-   INITIAL 3-SECOND PREPARATION DISPLAY
+   5 SECOND PREPARATION COUNTDOWN
+===================================================== */
+
+let preparationSeconds = 5;
+
+
+const preparationCounter =
+  document.getElementById(
+    "prepareCounter"
+  );
+
+
+const preparationInterval =
+  setInterval(function() {
+
+
+    preparationSeconds--;
+
+
+    if (preparationSeconds > 0) {
+
+
+      preparationCounter.textContent =
+        "Starting in " +
+        preparationSeconds +
+        " seconds...";
+
+    }
+
+    else {
+
+
+      clearInterval(
+        preparationInterval
+      );
+
+
+      preparationCounter.textContent =
+        "Starting...";
+
+    }
+
+
+  }, 1000);
+
+
+
+/* =====================================================
+   WAIT 5 SECONDS BEFORE STARTING TIMER
 ===================================================== */
 
 setTimeout(function() {
 
 
+  /* Hide preparation lines */
+
   document
-    .getElementById("preparationArea")
+    .getElementById(
+      "preparationArea"
+    )
     .style.display =
       "none";
 
 
+  /* Show timer */
+
   document
-    .getElementById("timerArea")
+    .getElementById(
+      "timerArea"
+    )
     .style.display =
       "block";
 
 
+  /* Start 3-hour timer */
+
   startDryingTimer();
 
 
-}, 3000);
+}, 5000);
+
 
 
 /* =====================================================
@@ -752,7 +879,8 @@ updateTimerDisplay();
 
 
 /*
-Update environmental values
+Update temperature,
+humidity and battery
 every 2 seconds.
 */
 
